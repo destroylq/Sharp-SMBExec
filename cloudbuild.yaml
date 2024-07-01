@@ -15,7 +15,9 @@ steps:
       fi
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/gcp-test-423908/gcppost', '.']
+  dir: 'SharpInvoke-SMBExec'
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/gcp-test-423908/gcppost']
+  dir: 'SharpInvoke-SMBExec'
 options:
   logging: CLOUD_LOGGING_ONLY
